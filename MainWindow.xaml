@@ -1,0 +1,290 @@
+﻿<Window x:Class="PathFinder.MainWindow"
+		xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+		xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+		xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+		xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+		xmlns:sys="clr-namespace:System;assembly=mscorlib"
+		xmlns:behaviors="clr-namespace:PathFinder.Behaviors"
+		xmlns:controls="clr-namespace:PathFinder.Controls"
+		xmlns:local="clr-namespace:PathFinder"
+		mc:Ignorable="d"
+		Title="Path Finder"
+		Width="782"
+		Height="550"
+		MinWidth="782"
+		MinHeight="550"
+		WindowStyle="None"
+		Background="{StaticResource ButtonBrush}"
+		BorderThickness="0"
+		WindowState="Normal"
+		ResizeMode="CanResize"
+		AllowsTransparency="true"
+		WindowStartupLocation="CenterScreen"
+		Name="Window"
+		FontFamily="Consolas">
+	<WindowChrome.WindowChrome>
+		<WindowChrome CaptionHeight="0" ResizeBorderThickness="12"/>
+	</WindowChrome.WindowChrome>
+	<Window.Resources>
+		<CollectionViewSource x:Key="Pages" Source="{Binding Pages}"/>
+		
+	</Window.Resources>
+
+	<Grid>
+		<Grid.RowDefinitions>
+			<RowDefinition Height="{StaticResource LargeButtonGridSize}"/>
+			<RowDefinition Height="*"/>
+		</Grid.RowDefinitions>
+		<Grid Grid.Row="0" Margin="1,1,1,0">
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition Width="Auto"/>
+				<ColumnDefinition Width="*"/>
+				<ColumnDefinition Width="{StaticResource LargeButtonGridSize}"/>
+				<ColumnDefinition Width="Auto"/>
+			</Grid.ColumnDefinitions>
+
+			<StackPanel Grid.Column="0" Orientation="Horizontal">
+				<CheckBox x:Name="InputWrap" Content="{StaticResource WrapPath}" Style="{StaticResource LeftCheckBox}" Margin="1" IsChecked="{Binding WrapInput}"/>
+				<CheckBox x:Name="OutputWrap" Content="{StaticResource WrapPath}" Style="{StaticResource RightCheckBox}" Margin="1" IsChecked="{Binding WrapOutput}"/>
+				<CheckBox Content="{StaticResource SavePath}" Style="{StaticResource LeftCheckBox}" Margin="1"  IsChecked="{Binding SavePages}"/>
+			</StackPanel>
+
+			<Label Grid.Column="1" Content="PATH FINDER" Style="{StaticResource DefaultLabel}" Background="{StaticResource PrimaryBrush}" FontSize="30" HorizontalContentAlignment="Right" Padding="0,0,5,0" Margin="1,1,0,1" MouseLeftButtonDown="Move" MouseDoubleClick="Maximize"/>
+			<Border Grid.Column="2" Margin="0,1,1,1" Padding="2" BorderBrush="{StaticResource PrimaryBrush}" BorderThickness="2">
+				<Image Source="/Icon.ico"/>
+			</Border>
+
+			<StackPanel Grid.Column="3" Orientation="Horizontal">
+				<Button Margin="1" Width="{StaticResource LargeButtonSize}" Content="―" FontWeight="Regular" Click="Minimize"/>
+				<Button Margin="1" Width="{StaticResource LargeButtonSize}" Content="+" FontWeight="Regular" Click="Maximize"/>
+				<Button Margin="1" Width="{StaticResource LargeButtonSize}" Content="×" FontWeight="Regular" Click="Exit"/>
+			</StackPanel>
+		</Grid>
+
+		<TabControl Margin="1,0,1,1" Grid.Row="1" SelectedItem="{Binding Page}" TabStripPlacement="Top" Padding="0" Background="Transparent" BorderBrush="Transparent" BorderThickness="0">
+			<TabControl.ItemsSource>
+				<CompositeCollection>
+					<CollectionContainer Collection="{Binding Source={StaticResource Pages}}"/>
+					<TabItem Style="{StaticResource TabStyle}" Padding="0,-3.5,0,3.5" Width="{StaticResource TabHeight}" Height="{StaticResource TabHeight}" FontSize="{StaticResource HeaderFontSize}" PreviewMouseLeftButtonDown="AddPage" FontWeight="Regular" Header="+"/>
+				</CompositeCollection>
+			</TabControl.ItemsSource>
+
+			<TabControl.ItemContainerStyle>
+				<Style TargetType="TabItem" BasedOn="{StaticResource TabStyle}">
+					<Setter Property="IsTabStop" Value="False"/>
+					<Setter Property="Width" Value="75"/>
+					<Setter Property="Height" Value="{StaticResource TabHeight}"/>
+					<Setter Property="Header" Value="{Binding ProcessCategory.ProcessType, Converter={StaticResource EnumConverter}}"/>
+					<Setter Property="Template">
+						<Setter.Value>
+							<ControlTemplate TargetType="TabItem">
+								<Border Margin="{TemplateBinding Margin}" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}">
+									<Grid>
+										<Grid.ColumnDefinitions>
+											<ColumnDefinition Width="*"/>
+											<ColumnDefinition Width="20"/>
+										</Grid.ColumnDefinitions>
+
+										<ContentPresenter Grid.Column="0" TextElement.Foreground="{TemplateBinding Foreground}" MouseRightButtonDown="ClonePage" VerticalAlignment="{TemplateBinding VerticalAlignment}" HorizontalAlignment="{TemplateBinding HorizontalAlignment}" ContentSource="Header"/>
+										<Button Grid.Column="1" Padding="0,-3.5,0,3.5" FontSize="{StaticResource HeaderFontSize}" FontWeight="Regular" Content="×" Click="RemovePage" Background="Transparent" BorderBrush="Transparent" BorderThickness="0" HorizontalAlignment="Center" VerticalAlignment="Center" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
+									</Grid>
+								</Border>
+							</ControlTemplate>
+						</Setter.Value>
+					</Setter>
+					<Setter Property="ContentTemplate">
+						<Setter.Value>
+							<DataTemplate>
+								<Grid MinWidth="450" Background="Transparent">
+									<Grid.RowDefinitions>
+										<RowDefinition Height="{StaticResource LargeButtonGridSize}"/>
+										<RowDefinition Height="Auto"/>
+										<RowDefinition Height="{StaticResource LargeButtonGridSize}"/>
+										<RowDefinition Height="*"/>
+									</Grid.RowDefinitions>
+
+									<ProgressBar Grid.Row="1" Height="5" Value="{Binding Progress}" Margin="1"/>
+
+									<Grid Grid.Row="0">
+										<Grid.ColumnDefinitions>
+											<ColumnDefinition Width="*"/>
+											<ColumnDefinition Width="Auto"/>
+										</Grid.ColumnDefinitions>
+
+										<Grid Grid.Column="0">
+											<Grid.ColumnDefinitions>
+												<ColumnDefinition Width="*"/>
+												<ColumnDefinition Width="Auto"/>
+											</Grid.ColumnDefinitions>
+
+											<ComboBox Grid.Column="0" Margin="1" IsEditable="True" Text="{Binding Parameter}" behaviors:DeselectTextBehavior.DeselectText="True" Padding="5" VerticalContentAlignment="Center" BorderThickness="2" ItemsSource="{Binding History}">
+												<ComboBox.InputBindings>
+													<KeyBinding Command="{Binding HistoryCommand}" Key="Enter"/>
+												</ComboBox.InputBindings>
+											</ComboBox>
+
+											<StackPanel Grid.Column="1" Orientation="Horizontal">
+												<TextBox Margin="1" Text="{Binding Delimiter}" behaviors:SelectTextBehavior.SelectText="True" Width="30" MaxLength="1" Style="{StaticResource DataBox}" Template="{StaticResource TextBoxBaseControlTemplate}" BorderThickness="2" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" BorderBrush="{StaticResource PrimaryBrush}" Visibility="{Binding Processor, Converter={StaticResource ProcessorVisibilityConverter}, ConverterParameter=PathFinder.Processors.Interfaces.IDelimiterProcessor}"/>
+
+												<CheckBox Margin="1" Content="{StaticResource FormPath}" Style="{StaticResource LeftCheckBox}" IsChecked="{Binding FormData}" Visibility="{Binding Processor, Converter={StaticResource ProcessorVisibilityConverter}, ConverterParameter=PathFinder.Processors.Searchers.XmlSearcher}"/>
+												
+												<CheckBox Margin="1" Style="{StaticResource LeftCheckBox}" IsChecked="{Binding CaseSensitive}" Content="Aa" Visibility="{Binding Processor, Converter={StaticResource ProcessorVisibilityConverter}, ConverterParameter=PathFinder.Processors.Interfaces.ICaseSensitiveProcessor}"/>
+
+												<Label Padding="5,0" Margin="1" Content="{Binding OutputsTotal}" Style="{StaticResource Header}" BorderThickness="0" Visibility="{Binding Processor, Converter={StaticResource ProcessorVisibilityConverter}, ConverterParameter=PathFinder.Processors.Abstracts.ISearcher}" Background="{StaticResource PrimaryBrush}" Foreground="{StaticResource PrimaryBackgroundBrush}"/>
+											</StackPanel>
+										</Grid>
+									</Grid>
+
+									<Grid Grid.Row="2">
+										<Grid.ColumnDefinitions>
+											<ColumnDefinition Width="{StaticResource IOBoxWidth}"/>
+											<ColumnDefinition Width="2*"/>
+											<ColumnDefinition Width="3*"/>
+											<ColumnDefinition Width="2*"/>
+											<ColumnDefinition Width="{StaticResource IOBoxWidth}"/>
+										</Grid.ColumnDefinitions>
+
+										<Rectangle Fill="{StaticResource PrimaryBrush}" Grid.Column="1" Grid.ColumnSpan="3" Height="2" VerticalAlignment="Bottom" HorizontalAlignment="Stretch" Margin="-2,0,-2,-3"/>
+
+										<Label Grid.Column="0" Content="INPUT" Style="{StaticResource Header}" Margin="1,1,1,-3" Padding="0,0,0,2" BorderThickness="2,2,2,0"/>
+										<Button Grid.Column="1" Content="FORMAT" Command="{Binding FormatCommand}" Margin="1"/>
+
+										<Grid Grid.Column="2">
+											<Grid.ColumnDefinitions>
+												<ColumnDefinition Width="*"/>
+												<ColumnDefinition Width=" Auto"/>
+												<ColumnDefinition Width="Auto"/>
+											</Grid.ColumnDefinitions>
+
+											<ComboBox Grid.Column="0" Margin="1" MaxDropDownHeight="1000000" BorderThickness="2" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" ItemsSource="{Binding ProcessCategoriesSource.View}" SelectedItem="{Binding ProcessCategory}" FontSize="{StaticResource HeaderFontSize}" FontWeight="Bold">
+												<ComboBox.GroupStyle>
+													<GroupStyle>
+														<GroupStyle.ContainerStyle>
+															<Style TargetType="GroupItem">
+																<Setter Property="HorizontalAlignment" Value="Stretch"/>
+																<Setter Property="HorizontalContentAlignment" Value="Center"/>
+																<Setter Property="Margin" Value="0"/>
+																<Setter Property="Padding" Value="0"/>
+																<Setter Property="Template">
+																	<Setter.Value>
+																		<ControlTemplate TargetType="GroupItem">
+																			<Expander Background="{StaticResource ButtonBrush}" Margin="0" Padding="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" IsExpanded="True" Header="{TemplateBinding Content}" HeaderTemplate="{TemplateBinding ContentTemplate}">
+																				<ItemsPresenter Margin="0"/>
+																			</Expander>
+																		</ControlTemplate>
+																	</Setter.Value>
+																</Setter>
+															</Style>
+														</GroupStyle.ContainerStyle>
+														<GroupStyle.HeaderTemplate>
+															<DataTemplate>
+																<Label Style="{StaticResource DefaultLabel}" Background="{StaticResource PrimaryBrush}" Content="{Binding Name}"/>
+															</DataTemplate>
+														</GroupStyle.HeaderTemplate>
+													</GroupStyle>
+												</ComboBox.GroupStyle>
+												<ComboBox.ItemTemplate>
+													<DataTemplate>
+														<TextBlock Text="{Binding ProcessType, Converter={StaticResource EnumConverter}}"/>
+													</DataTemplate>
+												</ComboBox.ItemTemplate>
+											</ComboBox>
+
+											<CheckBox Style="{StaticResource LeftCheckBox}" Grid.Column="1" Margin="1" IsChecked="{Binding Convert}" Visibility="{Binding Processor, Converter={StaticResource ProcessorVisibilityConverter}, ConverterParameter=PathFinder.Processors.Abstracts.IConverter}"/>
+											<Button Grid.Column="2" Margin="1" Width="25" Content="i" Command="{Binding InfoCommand}" Visibility="{Binding Processor, Converter={StaticResource ProcessorVisibilityConverter}, ConverterParameter=PathFinder.Processors.Interfaces.IInfoProcessor|true}"/>
+										</Grid>
+
+										<Button Grid.Column="3" Content="REINPUT" Command="{Binding ReinputCommand}" CommandParameter="-1" Margin="1"/>
+										<Label Grid.Column="4" Content="OUTPUTS" Style="{StaticResource Header}" Margin="1,1,1,-3" Padding="0,0,0,2" BorderThickness="2,2,2,0"/>
+									</Grid>
+
+									<Grid Grid.Row="3" Margin="0,1,0,0">
+										<Grid.ColumnDefinitions>
+											<ColumnDefinition Width="*" MinWidth="{StaticResource IOBoxWidthMinusOne}"/>
+											<ColumnDefinition Width="2"/>
+											<ColumnDefinition Width="*" MinWidth="{StaticResource IOBoxWidthMinusOne}"/>
+										</Grid.ColumnDefinitions>
+
+										<Border Grid.Column="0" Margin="1,2,0,1" Background="{StaticResource PrimaryBackgroundBrush}" BorderBrush="{StaticResource PrimaryBrush}" BorderThickness="2,0,2,2">
+											<Grid>
+												<Grid.ColumnDefinitions>
+													<ColumnDefinition Width="Auto"/>
+													<ColumnDefinition Width="*"/>
+												</Grid.ColumnDefinitions>
+
+												<ScrollViewer Grid.Column="0" Name="LineNumbersScroll" behaviors:VerticalScrollSyncBehavior.VerticalScrollSync="{Binding ElementName=Input}" Margin="{Binding ComputedHorizontalScrollVisibility, ElementName=Input, Converter={StaticResource VisibilityMarginConverter}}" VerticalScrollBarVisibility="Hidden" HorizontalScrollBarVisibility="Disabled">
+													<TextBlock Name="LineNumbers" Padding="5" TextAlignment="Right" FontSize="{StaticResource InputFontSize}" Foreground="{StaticResource PrimaryBrush}" TextWrapping="NoWrap"/>
+												</ScrollViewer>
+												<controls:HistoryTextBox Grid.Column="1" x:Name="Input" behaviors:VerticalScrollSyncBehavior.VerticalScrollSync="{Binding ElementName=LineNumbersScroll}" behaviors:LineNumbersBehavior.LineNumbers="{Binding ElementName=LineNumbers}" behaviors:HorizontalScrollBehavior.HorizontalScroll="True" behaviors:ScrollSelectBehavior.ScrollSelect="{Binding Scroll}" Style="{StaticResource DataBox}" TextWrapping="{Binding IsChecked, ElementName=InputWrap, Converter={StaticResource BoolWrapConverter}}" Text="{Binding Input, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Padding="5" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" AcceptsReturn="True" AcceptsTab="True" Template="{DynamicResource TextBoxBaseControlTemplate}" IsUndoEnabled="False"/>
+											</Grid>
+										</Border>
+
+										<GridSplitter Grid.Column="1" Margin="0,-1,0,0" IsTabStop="False" Background="{Binding Background, ElementName=Window}" HorizontalAlignment="Stretch"/>
+
+										<Border Grid.Column="2" Margin="0,2,1,1" BorderBrush="{StaticResource PrimaryBrush}" BorderThickness="2,0,2,2" Focusable="False" Background="{StaticResource PrimaryBackgroundBrush}">
+											<ScrollViewer Padding="5" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
+												<ItemsControl AlternationCount="1000000" IsTabStop="False" Width="Auto" Padding="0" ItemsSource="{Binding Outputs}">
+													<ItemsControl.ItemTemplate>
+														<DataTemplate>
+															<Expander IsExpanded="True" Margin="0,0,0,2">
+																<Expander.Header>
+																	<Grid Background="{StaticResource PrimaryBackgroundBrush}">
+																		<Grid.ColumnDefinitions>
+																			<ColumnDefinition Width="Auto"/>
+																			<ColumnDefinition Width="Auto"/>
+																			<ColumnDefinition Width="*"/>
+																		</Grid.ColumnDefinitions>
+
+																		<Button Grid.Column="0" Margin="0,0,1,0" Width="{StaticResource LargeButtonSize}" Padding="2" FontSize="{StaticResource InputFontSize}" Command="{Binding RelativeSource={RelativeSource AncestorType=ItemsControl}, Path=DataContext.ScrollCommand}" CommandParameter="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=(ItemsControl.AlternationIndex)}" Content="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=(ItemsControl.AlternationIndex), Converter={StaticResource IndexConverter}}" Visibility="{Binding RelativeSource={RelativeSource AncestorType=ItemsControl}, Path=DataContext.Processor, Converter={StaticResource ProcessorVisibilityConverter}, ConverterParameter=PathFinder.Processors.Abstracts.ISearcher}"/>
+																		<Button Grid.Column="1" Margin="1,0,5,0" Padding="2" FontSize="{StaticResource InputFontSize}" Command="{Binding RelativeSource={RelativeSource AncestorType=ItemsControl}, Path=DataContext.ReinputCommand}" CommandParameter="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=(ItemsControl.AlternationIndex)}" Content="REINPUT"/>
+																		<Separator Grid.Column="2" Margin="0,0,22,0" Background="{StaticResource PrimaryBrush}"/>
+																	</Grid>
+																</Expander.Header>
+																<ScrollViewer behaviors:HorizontalScrollBehavior.HorizontalScroll="True" behaviors:BubbleScrollBehavior.BubbleScroll="True" VerticalScrollBarVisibility="Disabled" HorizontalScrollBarVisibility="Auto">
+																	<StackPanel x:Name="OutputResult">
+																		<TextBox Text="{Binding Output, Mode=OneWay}" Style="{StaticResource DataBox}" HorizontalAlignment="Left" Padding="0,5" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Disabled" TextWrapping="Wrap" IsReadOnly="True" IsTabStop="False">
+																			<TextBox.Width>
+																				<MultiBinding Converter="{StaticResource WidthConverter}">
+																					<Binding Path="IsChecked" ElementName="OutputWrap"/>
+																					<Binding Path="ActualWidth" RelativeSource="{RelativeSource AncestorType=ScrollViewer}"/>
+																				</MultiBinding>
+																			</TextBox.Width>
+																		</TextBox>
+
+																		<Separator Margin="0" Visibility="{Binding Visibility, ElementName=Details}" Background="{StaticResource ButtonOverBrush}"/>
+
+																		<TextBox Text="{Binding Details, Mode=OneWay}" HorizontalAlignment="Left" Padding="0,5" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Disabled" x:Name="Details" TextWrapping="Wrap" IsReadOnly="True" IsTabStop="False">
+																			<TextBox.Width>
+																				<MultiBinding Converter="{StaticResource WidthConverter}">
+																					<Binding Path="IsChecked" ElementName="OutputWrap"/>
+																					<Binding Path="ActualWidth" RelativeSource="{RelativeSource AncestorType=ScrollViewer}"/>
+																				</MultiBinding>
+																			</TextBox.Width>
+																			<TextBox.Style>
+																				<Style TargetType="TextBox" BasedOn="{StaticResource DataBox}">
+																					<Style.Triggers>
+																						<Trigger Property="Text" Value="">
+																							<Setter Property="Visibility" Value="Collapsed"/>
+																						</Trigger>
+																					</Style.Triggers>
+																				</Style>
+																			</TextBox.Style>
+																		</TextBox>
+																	</StackPanel>
+																</ScrollViewer>
+															</Expander>
+														</DataTemplate>
+													</ItemsControl.ItemTemplate>
+												</ItemsControl>
+											</ScrollViewer>
+										</Border>
+									</Grid>
+								</Grid>
+							</DataTemplate>
+						</Setter.Value>
+					</Setter>
+				</Style>
+			</TabControl.ItemContainerStyle>
+		</TabControl>
+	</Grid>
+</Window>

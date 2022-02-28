@@ -1,0 +1,90 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+					xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+	<ResourceDictionary.MergedDictionaries>
+		<ResourceDictionary Source="Settings.xaml"/>
+	</ResourceDictionary.MergedDictionaries>
+	
+	<Style x:Key="LeftCheckBox" TargetType="CheckBox">
+		<Setter Property="Typography.Capitals" Value="AllPetiteCaps"/>
+		<Setter Property="FontSize" Value="{StaticResource HeaderFontSize}"/>
+		<Setter Property="FontWeight" Value="Bold"/>
+		<Setter Property="IsTabStop" Value="False"/>
+		<Setter Property="Background" Value="{StaticResource ButtonBrush}"/>
+		<Setter Property="Foreground" Value="{StaticResource PrimaryBrush}"/>
+		<Setter Property="BorderBrush" Value="{StaticResource PrimaryBrush}"/>
+		<Setter Property="BorderThickness" Value="2"/>
+		<Setter Property="HorizontalAlignment" Value="Stretch"/>
+		<Setter Property="VerticalAlignment" Value="Stretch"/>
+		<Setter Property="HorizontalContentAlignment" Value="Center"/>
+		<Setter Property="VerticalContentAlignment" Value="Center"/>
+		<Setter Property="Padding" Value="2"/>
+		<Setter Property="Margin" Value="0"/>
+		<Setter Property="Template">
+			<Setter.Value>
+				<ControlTemplate TargetType="CheckBox">
+					<Border HorizontalAlignment="Stretch" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}">
+						<Border Padding="{TemplateBinding Padding}" Background="{TemplateBinding Background}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+							<StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Orientation="Horizontal">
+								<Border Name="checkBoxBorder" BorderBrush="{StaticResource SecondaryBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="Transparent" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}" Margin="2">
+									<Path Name="optionMark" Data="F1 M 9.97498,1.22334L 4.6983,9.09834L 4.52164,9.09834L 0,5.19331L 1.27664,3.52165L 4.255,6.08833L 8.33331,1.52588e-005L 9.97498,1.22334 Z" Fill="{StaticResource SecondaryBrush}" Margin="1" Opacity="0" Stretch="None"/>
+								</Border>
+								<ContentPresenter Name="contentPresenter" Grid.Column="1" Focusable="False" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}" Margin="0" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
+							</StackPanel>
+						</Border>
+					</Border>
+					<ControlTemplate.Triggers>
+						<Trigger Property="IsMouseOver" Value="True">
+							<Setter Property="Background" Value="{StaticResource ButtonOverBrush}"/>
+							<Setter Property="BorderBrush" Value="{StaticResource SecondaryBrush}"/>
+						</Trigger>
+						<Trigger Property="IsPressed" Value="True">
+							<Setter Property="Background" Value="{StaticResource ButtonDownBrush}"/>
+							<Setter Property="BorderBrush" Value="{StaticResource SecondaryBrush}"/>
+						</Trigger>
+						<Trigger Property="IsChecked" Value="True">
+							<Setter Property="Opacity" TargetName="optionMark" Value="1"/>
+						</Trigger>
+						<Trigger Property="IsChecked" Value="{x:Null}">
+							<Setter Property="Opacity" TargetName="optionMark" Value="0"/>
+						</Trigger>
+					</ControlTemplate.Triggers>
+				</ControlTemplate>
+			</Setter.Value>
+		</Setter>
+	</Style>
+
+	<Style x:Key="RightCheckBox" TargetType="CheckBox" BasedOn="{StaticResource LeftCheckBox}">
+		<Setter Property="Template">
+			<Setter.Value>
+				<ControlTemplate TargetType="CheckBox">
+					<Border HorizontalAlignment="Stretch" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}">
+						<Border Padding="{TemplateBinding Padding}" Background="{TemplateBinding Background}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+							<StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Orientation="Horizontal">
+								<ContentPresenter Name="contentPresenter" Grid.Column="1" Focusable="False" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}" Margin="0" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
+								<Border Name="checkBoxBorder" BorderBrush="{StaticResource SecondaryBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="Transparent" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}" Margin="2">
+									<Path Name="optionMark" Data="F1 M 9.97498,1.22334L 4.6983,9.09834L 4.52164,9.09834L 0,5.19331L 1.27664,3.52165L 4.255,6.08833L 8.33331,1.52588e-005L 9.97498,1.22334 Z" Fill="{StaticResource SecondaryBrush}" Margin="1" Opacity="0" Stretch="None"/>
+								</Border>
+							</StackPanel>
+						</Border>
+					</Border>
+					<ControlTemplate.Triggers>
+						<Trigger Property="IsMouseOver" Value="True">
+							<Setter Property="Background" Value="{StaticResource ButtonOverBrush}"/>
+							<Setter Property="BorderBrush" Value="{StaticResource SecondaryBrush}"/>
+						</Trigger>
+						<Trigger Property="IsPressed" Value="True">
+							<Setter Property="Background" Value="{StaticResource ButtonDownBrush}"/>
+							<Setter Property="BorderBrush" Value="{StaticResource SecondaryBrush}"/>
+						</Trigger>
+						<Trigger Property="IsChecked" Value="True">
+							<Setter Property="Opacity" TargetName="optionMark" Value="1"/>
+						</Trigger>
+						<Trigger Property="IsChecked" Value="{x:Null}">
+							<Setter Property="Opacity" TargetName="optionMark" Value="0"/>
+						</Trigger>
+					</ControlTemplate.Triggers>
+				</ControlTemplate>
+			</Setter.Value>
+		</Setter>
+	</Style>
+</ResourceDictionary>
