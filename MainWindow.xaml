@@ -55,9 +55,9 @@
 			</Border>
 
 			<StackPanel Grid.Column="3" Orientation="Horizontal">
-				<Button Margin="1" Width="{StaticResource LargeButtonSize}" Content="―" FontWeight="Regular" Click="Minimize"/>
-				<Button Margin="1" Width="{StaticResource LargeButtonSize}" Content="+" FontWeight="Regular" Click="Maximize"/>
-				<Button Margin="1" Width="{StaticResource LargeButtonSize}" Content="×" FontWeight="Regular" Click="Exit"/>
+				<Button Margin="1" Width="{StaticResource LargeButtonSize}" Content="―" Foreground="{StaticResource SecondaryBrush}" FontWeight="Regular" Click="Minimize"/>
+				<Button Margin="1" Width="{StaticResource LargeButtonSize}" Content="+" Foreground="{StaticResource SecondaryBrush}" FontWeight="Regular" Click="Maximize"/>
+				<Button Margin="1" Width="{StaticResource LargeButtonSize}" Content="×" Foreground="{StaticResource SecondaryBrush}" FontWeight="Regular" Click="Exit"/>
 			</StackPanel>
 		</Grid>
 
