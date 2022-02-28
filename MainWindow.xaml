@@ -103,7 +103,7 @@
 										<RowDefinition Height="*"/>
 									</Grid.RowDefinitions>
 
-									<ProgressBar Grid.Row="1" Height="5" Value="{Binding Progress}" Margin="1"/>
+									<ProgressBar Grid.Row="1" Height="12" Foreground="Green" Value="{Binding Progress}" Margin="1"/>
 
 									<Grid Grid.Row="0">
 										<Grid.ColumnDefinitions>
@@ -127,7 +127,7 @@
 												<TextBox Margin="1" Text="{Binding Delimiter}" behaviors:SelectTextBehavior.SelectText="True" Width="30" MaxLength="1" Style="{StaticResource DataBox}" Template="{StaticResource TextBoxBaseControlTemplate}" BorderThickness="2" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" BorderBrush="{StaticResource PrimaryBrush}" Visibility="{Binding Processor, Converter={StaticResource ProcessorVisibilityConverter}, ConverterParameter=PathFinder.Processors.Interfaces.IDelimiterProcessor}"/>
 
 												<CheckBox Margin="1" Content="{StaticResource FormPath}" Style="{StaticResource LeftCheckBox}" IsChecked="{Binding FormData}" Visibility="{Binding Processor, Converter={StaticResource ProcessorVisibilityConverter}, ConverterParameter=PathFinder.Processors.Searchers.XmlSearcher}"/>
-												
+
 												<CheckBox Margin="1" Style="{StaticResource LeftCheckBox}" IsChecked="{Binding CaseSensitive}" Content="Aa" Visibility="{Binding Processor, Converter={StaticResource ProcessorVisibilityConverter}, ConverterParameter=PathFinder.Processors.Interfaces.ICaseSensitiveProcessor}"/>
 
 												<Label Padding="5,0" Margin="1" Content="{Binding OutputsTotal}" Style="{StaticResource Header}" BorderThickness="0" Visibility="{Binding Processor, Converter={StaticResource ProcessorVisibilityConverter}, ConverterParameter=PathFinder.Processors.Abstracts.ISearcher}" Background="{StaticResource PrimaryBrush}" Foreground="{StaticResource PrimaryBackgroundBrush}"/>

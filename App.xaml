@@ -7,13 +7,17 @@
 	<Application.Resources>
 		<ResourceDictionary>
 			<ResourceDictionary.MergedDictionaries>
-				<ResourceDictionary Source="Resources/Settings.xaml"/>
-				<ResourceDictionary Source="Resources/Icons.xaml"/>
-				<ResourceDictionary Source="Resources/Button.xaml"/>
-				<ResourceDictionary Source="Resources/CheckBox.xaml"/>
-				<ResourceDictionary Source="Resources/ScrollViewer.xaml"/>
-				<ResourceDictionary Source="Resources/TabControl.xaml"/>
-				<ResourceDictionary Source="Resources/TabItem.xaml"/>
+				<ResourceDictionary Source="Styles/Settings.xaml"/>
+				<ResourceDictionary Source="Styles/Icons.xaml"/>
+				<ResourceDictionary Source="Styles/Button.xaml"/>
+				<ResourceDictionary Source="Styles/CheckBox.xaml"/>
+				<ResourceDictionary Source="Styles/ComboBox.xaml"/>
+				<ResourceDictionary Source="Styles/Expander.xaml"/>
+				<ResourceDictionary Source="Styles/ProgressBar.xaml"/>
+				<ResourceDictionary Source="Styles/ScrollBar.xaml"/>
+				<ResourceDictionary Source="Styles/ScrollViewer.xaml"/>
+				<ResourceDictionary Source="Styles/TabControl.xaml"/>
+				<ResourceDictionary Source="Styles/TabItem.xaml"/>
 			</ResourceDictionary.MergedDictionaries>
 			
 			<converters:EnumConverter x:Key="EnumConverter"/>
