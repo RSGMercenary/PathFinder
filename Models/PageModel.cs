@@ -173,7 +173,7 @@ namespace PathFinder.Models
 			try
 			{
 				if(Processor is IFormatterProcessor processor)
-					processor.Format(Input);
+					Input = processor.Format(Input);
 			}
 			catch { }
 		}
