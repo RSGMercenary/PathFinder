@@ -39,6 +39,8 @@ namespace PathFinder.Processors.Abstracts
 				try
 				{
 					var results = processor.Process(state);
+					if(!results.Any())
+						continue;
 					Processor = processor;
 					return results;
 				}
